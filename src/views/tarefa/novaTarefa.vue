@@ -16,7 +16,7 @@
           <v-textarea outlined height="240" v-model="descricao" style="width:500px;"></v-textarea>
         </v-col>
       </v-row>
-      <v-btn outlined @click="insertTarefa()" class="salvar-btn" color="primary">SALVAR</v-btn>
+      <v-btn outlined @click="insertTarefa()" class="salvar-btn" color="primary" :disabled="!canInsertTarefa()">SALVAR</v-btn>
     </div>
   </div>
 </template>
@@ -28,11 +28,11 @@ export default {
   name: 'novaTarefa',
   data() {
     return {
-      nome: '',
-      data: '',
+      nome: null,
+      data: null,
       etiquetas: ['Faculdade', 'Trabalho', 'Dia-a-dia'],
-      etiquetaSelecionada: '',
-      descricao: '',
+      etiquetaSelecionada: null,
+      descricao: null,
       listaId: null
     }
   },
@@ -41,6 +41,9 @@ export default {
       dbClient.insertTarefas(parseInt(this.listaId), this.nome, this.data, this.etiquetaSelecionada, this.descricao)
       console.log(this.listaId, this.nome, this.data, this.etiquetaSelecionada, this.descricao)
       this.$router.push('/tarefas?listaId=' + this.listaId)
+    },
+    canInsertTarefa() {
+      return this.listaId && this.nome && this.data && this.etiquetaSelecionada && this.descricao
     }
   },
   mounted() {

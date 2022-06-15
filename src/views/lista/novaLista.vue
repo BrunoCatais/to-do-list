@@ -10,7 +10,7 @@
         <label for="descricao">Descrição:</label>
         <v-textarea outlined height="240" v-model="descricao" style="width:500px;"></v-textarea>
 
-        <v-btn outlined class="salvar-btn" @click="insertLista()" color="primary">SALVAR</v-btn>
+        <v-btn outlined class="salvar-btn" @click="insertLista()" :disabled="!canInsertLista()" color="primary">SALVAR</v-btn>
       </div>
     </div>
   </div>
@@ -31,6 +31,9 @@ export default {
     async insertLista() {
       await dbClient.insertLista(this.nome, this.descricao)
       await this.$router.push('/')
+    },
+    canInsertLista() {
+      return this.nome && this.descricao
     }
   }
 }
