@@ -21,7 +21,7 @@
             <span>{{ tarefa.data }}</span>
           </v-col>
           <v-col>
-            <v-btn width="10" outlined>X</v-btn>
+            <v-btn width="10" outlined @click="deleteTarefaByTarefaAndListaId(tarefa.id)">X</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -30,42 +30,28 @@
 </template>
 
 <script>
+import dbClient from '@/commons/apiclient/dbClient'
+
 export default {
   name: 'tarefas',
   data() {
     return {
-      tarefas: [
-        {
-          id: 1,
-          nome: 'Revisar conteudo de progweb',
-          descricao: 'Aulas 1 a 6',
-          etiqueta: 'Faculdade',
-          data: '16/07',
-          feito: false
-        },
-        {
-          id: 2,
-          nome: 'Fazer atividades de probest',
-          descricao: 'As tarefas estão dispoíveis no ava',
-          etiqueta: 'Faculdade',
-          data: '30/07',
-          feito: false
-        },
-        {
-          id: 3,
-          nome: 'Entregar trabalho de ed',
-          descricao: 'O trabalho deve ser entregue até as 23h59',
-          etiqueta: 'Dia-a-dia',
-          data: '10/10',
-          feito: false
-        }
-      ]
+      tarefas: [],
+      listaId: null
     }
   },
   methods: {
     redirectToNovaTarefa() {
-      this.$router.push('/novaTarefa')
+      this.$router.push('/novaTarefa?listaId=' + this.listaId)
+    },
+    async deleteTarefaByTarefaAndListaId(tarefaId) {
+      dbClient.deleteTarefaByTarefaAndListaId(tarefaId, this.listaId)
+      this.tarefas = await dbClient.findTarefasByListaId(this.listaId)
     }
+  },
+  async created() {
+    this.listaId = this.$route.query.listaId
+    this.tarefas = await dbClient.findTarefasByListaId(this.listaId)
   }
 }
 </script>

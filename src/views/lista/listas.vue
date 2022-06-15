@@ -9,9 +9,12 @@
       <v-card v-for="lista in listas" :key="lista.id" outlined
               class="pa-4 mb-3">
         <v-row align="center">
-          <v-col cols="11">
+          <v-col cols="10">
             <span class="w3-large">{{ lista.nome }}</span><br>
             <span>{{ lista.descricao }}</span>
+          </v-col>
+          <v-col class="pr-2 pl-2">
+            <v-btn outlined width="10" color="green" @click="redirectToListaTarefa(lista.id)">ENTRAR</v-btn>
           </v-col>
           <v-col>
             <v-btn width="10" @click="deleteLista(lista.id)" outlined>X</v-btn>
@@ -37,8 +40,8 @@ export default {
       await dbClient.deleteLista(id)
       this.listas = await dbClient.findListas()
     },
-    redirectToListaTarefa() {
-      this.$router.push('/tarefas')
+    redirectToListaTarefa(listaId) {
+      this.$router.push('/tarefas?listaId=' + listaId)
     },
     redirectToNovaLista() {
       this.$router.push('/novaLista')
