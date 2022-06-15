@@ -6,9 +6,6 @@
       <h3 class=" color-white">To Do List</h3>
     </a>
     <hr style="color: white">
-    <a @click="redirectToNovaTarefa()" class="sidebar-btn mb-5">
-      <span class="w3-button color-white">Nova tarefa</span>
-    </a>
     <a @click="redirectToNovaLista()" class="sidebar-btn mb-5">
       <span class="w3-button color-white">Nova lista</span>
     </a>

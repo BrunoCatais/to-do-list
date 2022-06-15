@@ -6,8 +6,7 @@
         <v-btn outlined @click="redirectToNovaLista()" color="primary">Nova lista</v-btn>
       </div>
 
-      <v-card v-for="lista in listas" :key="lista.id" hover outlined
-              @click="redirectToListaTarefa()"
+      <v-card v-for="lista in listas" :key="lista.id" outlined
               class="pa-4 mb-3">
         <v-row align="center">
           <v-col cols="11">
@@ -15,7 +14,7 @@
             <span>{{ lista.descricao }}</span>
           </v-col>
           <v-col>
-            <v-btn width="10" outlined>X</v-btn>
+            <v-btn width="10" @click="deleteLista(lista.id)" outlined>X</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -24,31 +23,29 @@
 </template>
 
 <script>
+import dbClient from '@/commons/apiclient/dbClient'
+
 export default {
   name: 'listas',
   data() {
     return {
-      listas: [
-        {
-          id: 1,
-          nome: 'Estudo',
-          descricao: 'Lista pra lembrar as coisas que preciso estudar pra semana que vem'
-        },
-        {
-          id: 2,
-          nome: 'Trabalho',
-          descricao: 'Coisa que tenho que fazer para o trabalho'
-        }
-      ]
+      listas: []
     }
   },
   methods: {
+    async deleteLista(id) {
+      await dbClient.deleteLista(id)
+      this.listas = await dbClient.findListas()
+    },
     redirectToListaTarefa() {
       this.$router.push('/tarefas')
     },
     redirectToNovaLista() {
       this.$router.push('/novaLista')
     }
+  },
+  async created() {
+    this.listas = await dbClient.findListas()
   }
 }
 </script>

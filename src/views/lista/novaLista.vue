@@ -5,24 +5,32 @@
 
       <div class="w3-cell input-cell">
         <label for="nome">Nome da lista:</label>
-        <v-text-field :value="nome" outlined hide-details class="mb-3"></v-text-field>
+        <v-text-field v-model="nome" outlined hide-details class="mb-3"></v-text-field>
 
         <label for="descricao">Descrição:</label>
         <v-textarea outlined height="240" v-model="descricao" style="width:500px;"></v-textarea>
 
-        <v-btn outlined class="salvar-btn" color="primary">SALVAR</v-btn>
+        <v-btn outlined class="salvar-btn" @click="insertLista()" color="primary">SALVAR</v-btn>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import dbClient from '@/commons/apiclient/dbClient'
+
 export default {
   name: 'novaLista',
   data() {
     return {
       nome: '',
       descricao: ''
+    }
+  },
+  methods: {
+    async insertLista() {
+      await dbClient.insertLista(this.nome, this.descricao)
+      await this.$router.push('/')
     }
   }
 }
