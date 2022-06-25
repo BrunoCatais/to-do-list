@@ -11,9 +11,9 @@
           <span>Etiqueta:</span>
           <v-select outlined :items="etiquetas" v-model="etiquetaSelecionada"></v-select>
         </v-col>
-        <v-col class="input-cell">
+        <v-col class="input-cell" >
           <span>Descrição:</span>
-          <v-textarea outlined height="240" v-model="descricao" style="width:500px;"></v-textarea>
+          <v-textarea outlined height="240" v-model="descricao" style="width:300px;"></v-textarea>
         </v-col>
       </v-row>
       <v-btn outlined @click="insertTarefa()" class="salvar-btn" color="primary" :disabled="!canInsertTarefa()">SALVAR</v-btn>

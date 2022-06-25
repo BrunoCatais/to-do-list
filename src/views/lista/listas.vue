@@ -3,13 +3,17 @@
     <div class="show-listas-container">
       <div class="header mb-2">
         <h2>Listas</h2>
+        <div class="search-wrapper">
+          <v-text-field type="text" v-model="search" placeholder="Pesquisar Listas.."/>
+          
+        </div>
         <v-btn outlined @click="redirectToNovaLista()" color="primary">Nova lista</v-btn>
       </div>
 
-      <v-card v-for="lista in listas" :key="lista.id" outlined
+      <v-card v-for="lista in filteredList" :key="lista.id" outlined
               class="pa-4 mb-3">
         <v-row align="center">
-          <v-col cols="10">
+          <v-col cols="9">
             <span class="w3-large">{{ lista.nome }}</span><br>
             <span>{{ lista.descricao }}</span>
           </v-col>
@@ -32,6 +36,7 @@ export default {
   name: 'listas',
   data() {
     return {
+      search: '',
       listas: []
     }
   },
@@ -47,6 +52,13 @@ export default {
       this.$router.push('/novaLista')
     }
   },
+   computed: {
+    filteredList() {
+      return this.listas.filter(lista => {
+        return lista.nome.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
+    },
   async created() {
     this.listas = await dbClient.findListas()
   }

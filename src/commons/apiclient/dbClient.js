@@ -25,6 +25,10 @@ class dbClient {
         return instance.delete(`/api/listas/${listaId}/tarefas/${tarefaId}`)
     }
 
+    async toggleStatusTarefa(tarefaId, listaId){
+        return instance.put(`/api/listas/${listaId}/tarefas/${tarefaId}`)
+    }
+
     async insertTarefas(listaId, nome, data, etiqueta, descricao) {
         let tarefa = {
             listaId: listaId,

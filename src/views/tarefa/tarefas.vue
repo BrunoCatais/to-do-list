@@ -3,12 +3,16 @@
     <div class="show-listas-container">
       <div class="header mb-3">
         <h2>Tarefas</h2>
+        <div class="search-wrapper">
+          <v-text-field type="text" v-model="search" placeholder="Pesquisar Tarefas.."/>
+          
+        </div>
         <v-btn outlined @click="redirectToNovaTarefa()" color="primary">Nova tarefa</v-btn>
       </div>
-      <v-card outlined v-for="tarefa in tarefas" :key="tarefa.id" class="pa-2 mb-4">
+      <v-card outlined v-for="tarefa in filteredList" :key="tarefa.id" class="pa-2 mb-4">
         <v-row align="center">
           <v-col cols="1" class="pa-0 ml-5">
-            <v-checkbox v-model="tarefa.feito"></v-checkbox>
+            <v-checkbox v-model="tarefa.done" @click="toggleStatusTarefa(tarefa.id)"></v-checkbox>
           </v-col>
           <v-col cols="7">
             <span class="w3-large ml-n13">{{ tarefa.nome }}</span><br>
@@ -36,6 +40,7 @@ export default {
   name: 'tarefas',
   data() {
     return {
+      search: '',
       tarefas: [],
       listaId: null
     }
@@ -44,11 +49,22 @@ export default {
     redirectToNovaTarefa() {
       this.$router.push('/novaTarefa?listaId=' + this.listaId)
     },
+    async toggleStatusTarefa(tarefaId){
+      dbClient.toggleStatusTarefa(tarefaId, this.listaId)
+      this.tarefas = await dbClient.findTarefasByListaId(this.listaId)
+    },
     async deleteTarefaByTarefaAndListaId(tarefaId) {
       dbClient.deleteTarefaByTarefaAndListaId(tarefaId, this.listaId)
       this.tarefas = await dbClient.findTarefasByListaId(this.listaId)
     }
   },
+    computed: {
+    filteredList() {
+      return this.tarefas.filter(tarefa => {
+        return tarefa.nome.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
+    },
   async created() {
     this.listaId = this.$route.query.listaId
     this.tarefas = await dbClient.findTarefasByListaId(this.listaId)
